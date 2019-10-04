@@ -29,7 +29,7 @@ public class Address implements Serializable {
 
     private String Street, AdditionalInfo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private CityInfo city;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
