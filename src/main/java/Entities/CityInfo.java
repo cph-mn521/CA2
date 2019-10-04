@@ -8,6 +8,7 @@ package Entities;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class CityInfo implements Serializable {
     private String city;
     private int zipCode;
 
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city", cascade = CascadeType.PERSIST)
     private List<Address> addresses;
 
     public CityInfo() {

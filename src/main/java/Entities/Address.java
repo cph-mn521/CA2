@@ -7,6 +7,7 @@ package Entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class Address implements Serializable {
     @ManyToOne
     private CityInfo city;
 
+    @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
     private List<InfoEntity> info;
 
     public Long getId() {
