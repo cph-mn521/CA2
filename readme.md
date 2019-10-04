@@ -9,5 +9,7 @@ https://docs.google.com/document/d/1KwvtlWjx-FINtFSUfkybmThiOaHmSonQgOhssf3hkdU/
 Gruppe 6 - Helligånden
 
 Martin Wulff
+
 Jonathan Hjelm
+
 Niels Bang
