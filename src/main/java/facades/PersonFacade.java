@@ -5,13 +5,11 @@
  */
 package facades;
 
-//import entities.Person;
+import Entities.Person;
 import exceptions.PersonNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import util.EMF_Creator;
 
@@ -49,19 +47,19 @@ public class PersonFacade {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(Person);
+            em.persist(person);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-    
-    public Long getPersonCount(){
+
+    public Long getPersonCount() {
         EntityManager em = emf.createEntityManager();
-        try{
-            long personCount = (long)em.createQuery("SELECT COUNT(p) FROM Person p").getSingleResult();
+        try {
+            long personCount = (long) em.createQuery("SELECT COUNT(p) FROM Person p").getSingleResult();
             return personCount;
-        }finally{  
+        } finally {
             em.close();
         }
     }
@@ -75,16 +73,15 @@ public class PersonFacade {
             em.close();
         }
     }
-    
-    public void editPerson(Person p) throws PersonNotFoundException{
+
+    public void editPerson(Person p) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             em.merge(p);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new PersonNotFoundException("No Person with provided id exists in database");
         }
     }
-        
 
     public void populate() {
         PersonFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));

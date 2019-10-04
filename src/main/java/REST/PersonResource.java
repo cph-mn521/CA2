@@ -5,7 +5,7 @@
  */
 package REST;
 
-import entities.Person;
+import Entities.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import facades.FacadeController;
@@ -58,7 +58,7 @@ public class PersonResource {
     public String getAllPersons() {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
-    
+
 //    @Path("edit/{id}")
 //    @POST
 //    @Consumes({MediaType.APPLICATION_JSON})
@@ -67,7 +67,6 @@ public class PersonResource {
 //        Person p = GSON.fromJson(json, Person.class);
 //        return GSON.toJson(FC.getPersonFacade().editPerson(p));
 //    }
-
     /**
      * Retrieves representation of an instance of REST.GenericResource
      *

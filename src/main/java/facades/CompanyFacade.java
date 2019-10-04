@@ -5,7 +5,7 @@
  */
 package facades;
 
-//import entities.Company;
+import Entities.Company;
 import exceptions.CompanyNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +55,13 @@ public class CompanyFacade {
             em.close();
         }
     }
-    
-    public Long getCompanyCount(){
+
+    public Long getCompanyCount() {
         EntityManager em = emf.createEntityManager();
-        try{
-            long companyCount = (long)em.createQuery("SELECT COUNT(c) FROM Company c").getSingleResult();
+        try {
+            long companyCount = (long) em.createQuery("SELECT COUNT(c) FROM Company c").getSingleResult();
             return companyCount;
-        }finally{  
+        } finally {
             em.close();
         }
     }
@@ -75,16 +75,15 @@ public class CompanyFacade {
             em.close();
         }
     }
-    
-    public Company editCompany(Company c) throws CompanyNotFoundException{
+
+    public Company editCompany(Company c) throws CompanyNotFoundException {
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             return em.merge(c);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new CompanyNotFoundException("No Company with provided id exists in database");
         }
     }
-       
 
     public void populate() {
         CompanyFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));

@@ -5,7 +5,7 @@
  */
 package REST;
 
-import entities.Company;
+import Entities.Company;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import facades.FacadeController;
