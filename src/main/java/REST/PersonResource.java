@@ -8,6 +8,7 @@ package REST;
 import Entities.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.PersonNotFoundException;
 import facades.FacadeController;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -35,7 +36,6 @@ public class PersonResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final FacadeController FC = new FacadeController();
-//    private static final CarFacade FACADE = CarFacade.getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE));
 
     @Context
     private UriInfo context;
@@ -59,14 +59,14 @@ public class PersonResource {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
 
-//    @Path("edit/{id}")
-//    @POST
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String editPerson(@PathParam("id") long id) {
-//        Person p = GSON.fromJson(json, Person.class);
-//        return GSON.toJson(FC.getPersonFacade().editPerson(p));
-//    }
+    @Path("edit/{id}")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String editPerson(@PathParam("id") long id, String person) throws PersonNotFoundException {
+        Person p = GSON.fromJson(person, Person.class);
+        return GSON.toJson(FC.getPersonFacade().editPerson(p));
+    }
     /**
      * Retrieves representation of an instance of REST.GenericResource
      *
