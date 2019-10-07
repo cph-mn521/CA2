@@ -30,13 +30,6 @@ public class Hobby implements Serializable {
     private Long id;
 
     @ManyToMany(mappedBy = "hobbies", cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "Hobbies",
-            joinColumns = {
-                @JoinColumn(name = "hobby_id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "person_id")}
-    )
     private List<Person> persons;
 
     private String name, description;
