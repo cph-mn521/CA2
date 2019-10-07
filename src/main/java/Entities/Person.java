@@ -16,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 /**
@@ -23,6 +25,11 @@ import javax.persistence.OneToOne;
  * @author Niels Bang
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person"),
+    @NamedQuery(name = "Person.getAll", query = "SELECT m FROM Person m"),
+    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName") //, @NamedQuery(name = "Person.getByHobby", query = "SELECT m FROM Person m JOIN m.Hobby a WHERE a.name = :name")   
+})
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
