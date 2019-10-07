@@ -13,22 +13,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 /**
  *
- * @author nille
+ * @author Niels Bang
  */
 @Entity
 public class Hobby implements Serializable {
 
-    @ManyToMany(mappedBy = "id", cascade = CascadeType.PERSIST)
-    private List<Person> persons;
-
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany(mappedBy = "hobbies", cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "Hobbies",
+            joinColumns = {
+                @JoinColumn(name = "hobby_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "person_id")}
+    )
+    private List<Person> persons;
 
     private String name, description;
 
