@@ -6,8 +6,10 @@
 package REST;
 
 import Entities.Company;
+import Entities.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.PersonNotFoundException;
 import facades.FacadeController;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -18,8 +20,10 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import util.EMF_Creator;
 
@@ -56,8 +60,17 @@ public class CompanyResource {
     public String getAllPersons() {
         return GSON.toJson(FC.getCompanyFacade().getAllCompanies());
     }
-
-    /**
+    
+    
+    @Path("edit/{id}")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String editPerson(@PathParam("id") long id, String company) throws PersonNotFoundException {
+        Person p = GSON.fromJson(company, Person.class);
+        return GSON.toJson(FC.getPersonFacade().editPerson(p));
+    }
+        /**
      * Retrieves representation of an instance of REST.GenericResource
      *
      * @return an instance of java.lang.String
@@ -78,6 +91,7 @@ public class CompanyResource {
     @Consumes(MediaType.APPLICATION_XML)
     public void putXml(String content) {
     }
+
 
     @GET
     @Path("populate")

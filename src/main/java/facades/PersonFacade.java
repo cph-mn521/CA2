@@ -74,10 +74,10 @@ public class PersonFacade {
         }
     }
 
-    public void editPerson(Person p) throws PersonNotFoundException {
+    public Person editPerson(Person p) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            em.merge(p);
+            return em.merge(p);
         } catch (Exception e) {
             throw new PersonNotFoundException("No Person with provided id exists in database");
         }
@@ -85,6 +85,7 @@ public class PersonFacade {
 
     public void populate() {
         PersonFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
+        cf.addPerson(new Person("Donald", "Trump", null, null));
 //        cf.addCar(new Car(2000, "VW", "Golf", 10000, "Angela Merkel", "am11111"));
 //        cf.addCar(new Car(2008, "Ford", "Ka", 15000, "Donald Trump", "dt22222"));
 //        cf.addCar(new Car(2017, "Audi", "RS7", 800000, "Kim Jung Un", "kj33333"));
