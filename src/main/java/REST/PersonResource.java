@@ -59,12 +59,13 @@ public class PersonResource {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
 
-    @Path("edit/{id}")
+    @Path("edit{id}")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public String editPerson(@PathParam("id") long id, String person) throws PersonNotFoundException {
-        Person p = GSON.fromJson(person, Person.class);
+    public String editPerson(@PathParam("id") long id, @PathParam("person") String json) throws PersonNotFoundException {
+        Person p = GSON.fromJson(json, Person.class);
+        p.setId(id);
         return GSON.toJson(FC.getPersonFacade().editPerson(p));
     }
     /**
@@ -72,22 +73,22 @@ public class PersonResource {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public String getXml() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_XML)
+//    public String getXml() {
+//        //TODO return proper representation object
+//        throw new UnsupportedOperationException();
+//    }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
      *
      * @param content representation for the resource
      */
-    @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
-    }
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_XML)
+//    public void putXml(String content) {
+//    }
 
     @GET
     @Path("populate")
