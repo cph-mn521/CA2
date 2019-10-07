@@ -19,14 +19,14 @@ import javax.persistence.OneToOne;
 
 /**
  *
- * @author nille
+ * @author Niels Bang
  */
 @Entity
 public class InfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
