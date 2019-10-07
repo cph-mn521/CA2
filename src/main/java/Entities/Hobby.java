@@ -17,18 +17,18 @@ import javax.persistence.ManyToMany;
 
 /**
  *
- * @author nille
+ * @author Niels Bang
  */
 @Entity
 public class Hobby implements Serializable {
-
-    @ManyToMany(mappedBy = "id", cascade = CascadeType.PERSIST)
-    private List<Person> persons;
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToMany(mappedBy = "id", cascade = CascadeType.PERSIST)
+    private List<Person> persons;
 
     private String name, description;
 
