@@ -84,15 +84,26 @@ public class CompanyFacade {
         }
     }
 
-    public Company editCompany(Company c) throws CompanyNotFoundException {
+    public void editCompany(Company c) throws CompanyNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.merge(c);
+            em.getTransaction().begin();
+            em.merge(c);
+            em.getTransaction().commit();
         } catch (Exception e) {
             throw new CompanyNotFoundException("No Company with provided id exists in database");
+        } finally {
+            em.close();
         }
     }
     
+    public Company getCompanyById(long id) throws CompanyNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        if (em.find(Company.class, id) != null) {
+            return em.find(Company.class, id);
+        }
+        throw new CompanyNotFoundException("No Company with provided id exists in database");
+    }
     
 
     public void populate() {

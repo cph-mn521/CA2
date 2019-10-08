@@ -74,13 +74,25 @@ public class PersonFacade {
         }
     }
 
-    public Person editPerson(Person p) throws PersonNotFoundException {
+    public void editPerson(Person p) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.merge(p);
+            em.getTransaction().begin();
+            em.merge(p);
+            em.getTransaction().commit();
         } catch (Exception e) {
             throw new PersonNotFoundException("No Person with provided id exists in database");
+        } finally {
+            em.close();
         }
+    }
+
+    public Person getPersonById(long id) throws PersonNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        if (em.find(Person.class, id) != null) {
+            return em.find(Person.class, id);
+        }
+        throw new PersonNotFoundException("No Person with provided id exists in database");
     }
 
     public void populate() {

@@ -49,7 +49,7 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
-        return "{\"msg\":\"Hej verden!\"}";
+        return "{\"msg\":\"Person API\"}";
     }
 
     @Path("all")
@@ -59,15 +59,17 @@ public class PersonResource {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
 
-    @Path("edit{id}")
+    @Path("edit/{id}")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public String editPerson(@PathParam("id") long id, @PathParam("person") String json) throws PersonNotFoundException {
-        Person p = GSON.fromJson(json, Person.class);
+    public String editPerson(@PathParam("id") long id, String person) throws PersonNotFoundException {
+        Person p = GSON.fromJson(person, Person.class);
         p.setId(id);
-        return GSON.toJson(FC.getPersonFacade().editPerson(p));
+        FC.getPersonFacade().editPerson(p);
+        return GSON.toJson(FC.getPersonFacade().getPersonById(p.getId()));
     }
+
     /**
      * Retrieves representation of an instance of REST.GenericResource
      *
@@ -89,7 +91,6 @@ public class PersonResource {
 //    @Consumes(MediaType.APPLICATION_XML)
 //    public void putXml(String content) {
 //    }
-
     @GET
     @Path("populate")
     public void populate() {
