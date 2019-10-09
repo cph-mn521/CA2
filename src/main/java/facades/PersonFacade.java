@@ -74,10 +74,13 @@ public class PersonFacade {
     }
 
 
-    public List getByHobby(String name){
+    public List getByHobby(String name) throws PersonNotFoundException{
         EntityManager em = getEntityManager();
+        
         try {
-            return em.createNamedQuery("Person.getByHobby").setParameter("name", name).getResultList();
+            List<Person> out = em.createNamedQuery("Person.getByHobby").setParameter("name", name).getResultList();
+            if(out.size()<1)throw new PersonNotFoundException("No person with hobbies found");
+            return out;         
         } finally {
             em.close();
         }
