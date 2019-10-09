@@ -6,9 +6,12 @@
 package facades;
 
 import Entities.Address;
+import Entities.CityInfo;
 import Entities.Company;
+import Entities.Hobby;
 import Entities.InfoEntity;
 import Entities.Person;
+import Entities.Phone;
 import exceptions.CompanyNotFoundException;
 import exceptions.PersonNotFoundException;
 import java.util.ArrayList;
@@ -66,6 +69,39 @@ public class CompanyFacade {
         }
     }
 
+    public void addInfoEntity(InfoEntity ie) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(ie);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void addAddress(Address a) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(a);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void addPhone(Phone p) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(p);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
     public Long getCompanyCount() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -98,7 +134,7 @@ public class CompanyFacade {
             em.close();
         }
     }
-    
+
     public Company getCompanyById(long id) throws CompanyNotFoundException {
         EntityManager em = emf.createEntityManager();
         if (em.find(Company.class, id) != null) {
@@ -106,11 +142,55 @@ public class CompanyFacade {
         }
         throw new CompanyNotFoundException("No Company with provided id exists in database");
     }
-    
 
     public void populate() {
         CompanyFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
-        cf.addCompany(new Company("Chokoladefabrikken", "Laver chokolade", null, 5, 20000, null));
+        EntityManager em = cf.getEntityManager();
+        Company c1 = new Company();
+        c1.setName("McDonald's");
+        c1.setDescription("Fast Food");
+        c1.setId((long) 123456789);
+        c1.setNumEmployees(30000);
+        c1.setMarketValue(20000000);
+
+        InfoEntity ie = new InfoEntity();
+        ie.setEmail("McDonalds@mcd.dk");
+
+        Phone p = new Phone();
+        p.setNumber("+45 33 45 12 28");
+        p.setDescription("Official McD");
+
+        List<Phone> phones = new ArrayList();
+        phones.add(p);
+//        phone.setInfo(ie);
+//        List<Phone> phones = new ArrayList();
+//        phones.add(phone);
+
+        Address a = new Address();
+        a.setStreet("Kongevejen");
+        a.setCity(new CityInfo("Lyngby", 2800, null));
+        a.setAdditionalInfo("AdditionalInfo");
+
+        cf.addPhone(p);
+        cf.addInfoEntity(ie);
+        cf.addCompany(c1);
+        cf.addAddress(a);
+
+        try {
+            em.getTransaction().begin();
+            Company company = em.find(Company.class, (long) 1);
+            InfoEntity info = em.find(InfoEntity.class, (long) 1);
+            Address address = em.find(Address.class, (long) 1);
+            info.setAddress(address);
+            info.setPhones(phones);
+            company.setInfo(info);
+            em.merge(company);
+            em.merge(info);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
     }
 
 }

@@ -58,7 +58,15 @@ public class PersonResource {
     public String getAllPersons() {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
-
+    
+    @Path("hobby/{name}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getByHobby(@PathParam("name") String name) throws PersonNotFoundException {
+        return GSON.toJson(FC.getPersonFacade().getByHobby(name));
+    }
+    
+    
     @Path("edit/{id}")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
@@ -69,6 +77,8 @@ public class PersonResource {
         FC.getPersonFacade().editPerson(p);
         return GSON.toJson(FC.getPersonFacade().getPersonById(p.getId()));
     }
+    
+    
 
     /**
      * Retrieves representation of an instance of REST.GenericResource

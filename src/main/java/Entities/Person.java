@@ -6,6 +6,7 @@
 package Entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 /**
@@ -23,6 +26,12 @@ import javax.persistence.OneToOne;
  * @author Niels Bang
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person p"),
+    @NamedQuery(name = "Person.getAll", query = "SELECT m FROM Person m"),
+    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName"), 
+    @NamedQuery(name = "Person.getByHobby", query = "SELECT DISTINCT p FROM Person p JOIN p.hobbies h WHERE h.name = :name")   
+})
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +56,7 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.info = info;
         this.hobbies = hobbies;
+        if(this.hobbies == null)this.hobbies = new ArrayList<>();
     }
 
     public InfoEntity getInfo() {

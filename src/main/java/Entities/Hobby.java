@@ -6,6 +6,7 @@
 package Entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -16,12 +17,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Niels Bang
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Hobby.deleteAllRows", query = "DELETE from Hobby h"),
+    @NamedQuery(name = "Hobby.getByName", query = "SELECT h FROM Hobby h WHERE h.name LIKE :name")
+})
 public class Hobby implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +46,12 @@ public class Hobby implements Serializable {
 
     public Hobby(List<Person> persons, String name, String description) {
         this.persons = persons;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Hobby(String name, String description) {
+        this.persons = new ArrayList<>();
         this.name = name;
         this.description = description;
     }
