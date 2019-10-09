@@ -69,6 +69,8 @@ public class PersonResource {
         FC.getPersonFacade().editPerson(p);
         return GSON.toJson(FC.getPersonFacade().getPersonById(p.getId()));
     }
+    
+    
 
     /**
      * Retrieves representation of an instance of REST.GenericResource

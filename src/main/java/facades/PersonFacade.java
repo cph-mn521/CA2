@@ -5,6 +5,7 @@
  */
 package facades;
 
+import Entities.Hobby;
 import Entities.Person;
 import exceptions.PersonNotFoundException;
 import java.util.List;
@@ -54,6 +55,17 @@ public class PersonFacade {
         }
     }
 
+    public void addHobby(Hobby h) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(h);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
     public Long getPersonCount() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -97,7 +109,29 @@ public class PersonFacade {
 
     public void populate() {
         PersonFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
-        cf.addPerson(new Person("Donald", "Trump", null, null));
-    }
+        Hobby h1 = new Hobby();
+        Person p1 = new Person();
 
+        h1.setName("Frimærker");
+        h1.setDescription("Samler på frimærker");
+        p1.setFirstName("Stein");
+        p1.setLastName("Bagger");
+
+        cf.addPerson(p1);
+        cf.addHobby(h1);
+
+        EntityManager em = cf.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Person person1 = em.find(Person.class, (long) 1);
+            Hobby hobby1 = em.find(Hobby.class, (long) 1);
+            person1.addHobby(hobby1);
+            em.merge(person1);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }
+
+
