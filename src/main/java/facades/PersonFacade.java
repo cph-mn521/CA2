@@ -73,6 +73,7 @@ public class PersonFacade {
         }
     }
 
+
     public List getByHobby(String name){
         EntityManager em = getEntityManager();
         try {
@@ -81,22 +82,31 @@ public class PersonFacade {
             em.close();
         }
     }
-    
-    public Person editPerson(Person p) throws PersonNotFoundException {
+
+    public void editPerson(Person p) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.merge(p);
+            em.getTransaction().begin();
+            em.merge(p);
+            em.getTransaction().commit();
         } catch (Exception e) {
             throw new PersonNotFoundException("No Person with provided id exists in database");
+        } finally {
+            em.close();
         }
+    }
+
+    public Person getPersonById(long id) throws PersonNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        if (em.find(Person.class, id) != null) {
+            return em.find(Person.class, id);
+        }
+        throw new PersonNotFoundException("No Person with provided id exists in database");
     }
 
     public void populate() {
         PersonFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
         cf.addPerson(new Person("Donald", "Trump", null, null));
-//        cf.addCar(new Car(2000, "VW", "Golf", 10000, "Angela Merkel", "am11111"));
-//        cf.addCar(new Car(2008, "Ford", "Ka", 15000, "Donald Trump", "dt22222"));
-//        cf.addCar(new Car(2017, "Audi", "RS7", 800000, "Kim Jung Un", "kj33333"));
     }
 
 }

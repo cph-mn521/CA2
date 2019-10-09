@@ -5,7 +5,9 @@
  */
 package facades;
 
+import Entities.Address;
 import Entities.Company;
+import Entities.InfoEntity;
 import Entities.Person;
 import exceptions.CompanyNotFoundException;
 import exceptions.PersonNotFoundException;
@@ -84,22 +86,31 @@ public class CompanyFacade {
         }
     }
 
-    public Company editCompany(Company c) throws CompanyNotFoundException {
+    public void editCompany(Company c) throws CompanyNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.merge(c);
+            em.getTransaction().begin();
+            em.merge(c);
+            em.getTransaction().commit();
         } catch (Exception e) {
             throw new CompanyNotFoundException("No Company with provided id exists in database");
+        } finally {
+            em.close();
         }
     }
     
+    public Company getCompanyById(long id) throws CompanyNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        if (em.find(Company.class, id) != null) {
+            return em.find(Company.class, id);
+        }
+        throw new CompanyNotFoundException("No Company with provided id exists in database");
+    }
     
 
     public void populate() {
         CompanyFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
-//        cf.addCar(new Car(2000, "VW", "Golf", 10000, "Angela Merkel", "am11111"));
-//        cf.addCar(new Car(2008, "Ford", "Ka", 15000, "Donald Trump", "dt22222"));
-//        cf.addCar(new Car(2017, "Audi", "RS7", 800000, "Kim Jung Un", "kj33333"));
+        cf.addCompany(new Company("Chokoladefabrikken", "Laver chokolade", null, 5, 20000, null));
     }
 
 }

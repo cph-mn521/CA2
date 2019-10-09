@@ -37,6 +37,16 @@ public class Address implements Serializable {
     @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
     private List<InfoEntity> info;
 
+    public Address() {
+    }
+
+    public Address(String Street, String AdditionalInfo, CityInfo city, List<InfoEntity> info) {
+        this.Street = Street;
+        this.AdditionalInfo = AdditionalInfo;
+        this.city = city;
+        this.info = info;
+    }
+
     public Long getId() {
         return id;
     }

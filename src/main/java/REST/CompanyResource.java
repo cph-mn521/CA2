@@ -9,6 +9,7 @@ import Entities.Company;
 import Entities.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.CompanyNotFoundException;
 import exceptions.PersonNotFoundException;
 import facades.FacadeController;
 import java.util.List;
@@ -51,7 +52,7 @@ public class CompanyResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
-        return "{\"msg\":\"Hej verden!\"}";
+        return "{\"msg\":\"Company API\"}";
     }
 
     @Path("all")
@@ -66,9 +67,11 @@ public class CompanyResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public String editPerson(@PathParam("id") long id, String company) throws PersonNotFoundException {
-        Person p = GSON.fromJson(company, Person.class);
-        return GSON.toJson(FC.getPersonFacade().editPerson(p));
+    public String editPerson(@PathParam("id") long id, String company) throws CompanyNotFoundException {
+        Company c = GSON.fromJson(company, Company.class);
+        c.setId(id);
+        FC.getCompanyFacade().editCompany(c);
+        return GSON.toJson(FC.getCompanyFacade().getCompanyById(c.getId()));
     }
         /**
      * Retrieves representation of an instance of REST.GenericResource
