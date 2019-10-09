@@ -6,6 +6,7 @@
 package Entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -26,9 +27,10 @@ import javax.persistence.OneToOne;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person"),
+    @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person p"),
     @NamedQuery(name = "Person.getAll", query = "SELECT m FROM Person m"),
-    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName") //, @NamedQuery(name = "Person.getByHobby", query = "SELECT m FROM Person m JOIN m.Hobby a WHERE a.name = :name")   
+    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName"), 
+    @NamedQuery(name = "Person.getByHobby", query = "SELECT DISTINCT p FROM Person p JOIN p.hobbies h WHERE h.name = :name")   
 })
 public class Person implements Serializable {
 
@@ -54,6 +56,7 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.info = info;
         this.hobbies = hobbies;
+        if(this.hobbies == null)this.hobbies = new ArrayList<>();
     }
 
     public InfoEntity getInfo() {

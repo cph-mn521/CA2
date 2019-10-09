@@ -66,14 +66,22 @@ public class PersonFacade {
 
     public List getAllPersons() {
         EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Person> query = em.createQuery("Select p from Person p", Person.class);
-            return query.getResultList();
+        try {            
+            return em.createNamedQuery("Person.getAll").getResultList();
         } finally {
             em.close();
         }
     }
 
+    public List getByHobby(String name){
+        EntityManager em = getEntityManager();
+        try {
+            return em.createNamedQuery("Person.getByHobby").setParameter("name", name).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
     public Person editPerson(Person p) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         try {
