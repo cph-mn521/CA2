@@ -5,9 +5,11 @@
  */
 package REST;
 
+import Entities.Hobby;
 import Entities.Person;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import exceptions.PersonNotFoundException;
 import facades.FacadeController;
 import java.util.List;
@@ -58,15 +60,14 @@ public class PersonResource {
     public String getAllPersons() {
         return GSON.toJson(FC.getPersonFacade().getAllPersons());
     }
-    
+
     @Path("hobby/{name}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getByHobby(@PathParam("name") String name) throws PersonNotFoundException {
         return GSON.toJson(FC.getPersonFacade().getByHobby(name));
     }
-    
-    
+
     @Path("edit/{id}")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
@@ -77,8 +78,26 @@ public class PersonResource {
         FC.getPersonFacade().editPerson(p);
         return GSON.toJson(FC.getPersonFacade().getPersonById(p.getId()));
     }
-    
-    
+
+    @Path("createperson")
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public void createPerson(String person) {
+        Person p = new Person();
+        Hobby h = new Hobby();
+        JsonObject json = GSON.fromJson(person, JsonObject.class);
+        JsonObject personObject = json.getAsJsonObject("person");
+        JsonObject hobbyObject = json.getAsJsonObject("hobby");
+
+        p.setFirstName(personObject.get("firstName").toString().replace("\"", ""));
+        p.setLastName(personObject.get("lastName").toString().replace("\"", ""));
+
+        h.setName(hobbyObject.get("name").toString().replace("\"", ""));
+        h.setDescription(hobbyObject.get("description").toString().replace("\"", ""));
+  
+        FC.getPersonFacade().addPersonWithHobby(p, h);
+    }
 
     /**
      * Retrieves representation of an instance of REST.GenericResource
@@ -91,7 +110,6 @@ public class PersonResource {
 //        //TODO return proper representation object
 //        throw new UnsupportedOperationException();
 //    }
-
     /**
      * PUT method for updating or creating an instance of GenericResource
      *

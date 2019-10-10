@@ -44,12 +44,30 @@ public class PersonFacade {
         return emf.createEntityManager();
     }
 
-    public void addPerson(Person person) {
+    public void addPersonWithHobby(Person p, Hobby h) {
+        EntityManager em = getEntityManager();
+        PersonFacade cf = getFacade(EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.DROP_AND_CREATE));
+        Person person = cf.addPerson(p);
+        cf.addHobby(h);
+        Person personP = em.find(Person.class, (long) person.getId());
+        personP.addHobby(h);
+        try {
+            em.getTransaction().begin();
+            em.merge(personP);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Person addPerson(Person person) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(person);
+            em.flush();
             em.getTransaction().commit();
+            return person;
         } finally {
             em.close();
         }
@@ -78,21 +96,22 @@ public class PersonFacade {
 
     public List getAllPersons() {
         EntityManager em = getEntityManager();
-        try {            
+        try {
             return em.createNamedQuery("Person.getAll").getResultList();
         } finally {
             em.close();
         }
     }
 
-
-    public List getByHobby(String name) throws PersonNotFoundException{
+    public List getByHobby(String name) throws PersonNotFoundException {
         EntityManager em = getEntityManager();
-        
+
         try {
             List<Person> out = em.createNamedQuery("Person.getByHobby").setParameter("name", name).getResultList();
-            if(out.size()<1)throw new PersonNotFoundException("No person with hobbies found");
-            return out;         
+            if (out.size() < 1) {
+                throw new PersonNotFoundException("No person with hobbies found");
+            }
+            return out;
         } finally {
             em.close();
         }
@@ -145,5 +164,3 @@ public class PersonFacade {
         }
     }
 }
-
-
