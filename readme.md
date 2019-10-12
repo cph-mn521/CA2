@@ -10,6 +10,6 @@ Gruppe 6 - Helligånden
 
 Martin Wulff
 
-Jonathan Hjelm
+Jonatan Hjelm
 
 Niels Bang
