@@ -67,6 +67,13 @@ public class PersonResource {
     public String getByHobby(@PathParam("name") String name) throws PersonNotFoundException {
         return GSON.toJson(FC.getPersonFacade().getByHobby(name));
     }
+    
+    @Path("zipcode/{zipcode}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getByZipcode(@PathParam("zipcode") int zipcode) throws PersonNotFoundException {
+        return GSON.toJson(FC.getPersonFacade().getByZipcode(zipcode));
+    }
 
     @Path("edit/{id}")
     @POST
@@ -98,27 +105,8 @@ public class PersonResource {
   
         FC.getPersonFacade().addPersonWithHobby(p, h);
     }
+   
 
-    /**
-     * Retrieves representation of an instance of REST.GenericResource
-     *
-     * @return an instance of java.lang.String
-     */
-//    @GET
-//    @Produces(MediaType.APPLICATION_XML)
-//    public String getXml() {
-//        //TODO return proper representation object
-//        throw new UnsupportedOperationException();
-//    }
-    /**
-     * PUT method for updating or creating an instance of GenericResource
-     *
-     * @param content representation for the resource
-     */
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_XML)
-//    public void putXml(String content) {
-//    }
     @GET
     @Path("populate")
     public void populate() {

@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Niels Bang
  */
-@Path("ZipCode")
+@Path("zipcode")
 public class CityInfoResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

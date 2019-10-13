@@ -29,8 +29,10 @@ import javax.persistence.OneToOne;
 @NamedQueries({
     @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person p"),
     @NamedQuery(name = "Person.getAll", query = "SELECT m FROM Person m"),
-    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName"), 
-    @NamedQuery(name = "Person.getByHobby", query = "SELECT DISTINCT p FROM Person p JOIN p.hobbies h WHERE h.name = :name")   
+    @NamedQuery(name = "Person.getByName", query = "SELECT m FROM Person m WHERE m.firstName LIKE :firstName AND m.lastName LIKE :lastName"),
+    @NamedQuery(name = "Person.getByHobby", query = "SELECT DISTINCT p FROM Person p JOIN p.hobbies h WHERE h.name = :name"),
+    @NamedQuery(name = "Person.getByZipcode", query = "SELECT p FROM Person p WHERE p.info.address.city.zipCode = :zipCode")
+
 })
 public class Person implements Serializable {
 
@@ -56,7 +58,9 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.info = info;
         this.hobbies = hobbies;
-        if(this.hobbies == null)this.hobbies = new ArrayList<>();
+        if (this.hobbies == null) {
+            this.hobbies = new ArrayList<>();
+        }
     }
 
     public InfoEntity getInfo() {
